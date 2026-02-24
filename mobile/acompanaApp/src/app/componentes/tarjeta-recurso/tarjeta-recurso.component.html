@@ -1,0 +1,23 @@
+<ion-card (click)="onClickCard()">
+  <ion-card-header>
+    <ion-card-title>{{ recurso.nombre }}</ion-card-title>
+    <ion-card-subtitle>{{ recurso.tipo }}</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p *ngIf="recurso.direccion"> {{ recurso.direccion }}</p>
+    <p *ngIf="recurso.telefono"> {{ recurso.telefono }}</p>
+
+    <p *ngIf="recurso.descripcion_servicios">
+      {{ recurso.descripcion_servicios }}
+    </p>
+
+    <ion-button
+      *ngIf="recurso.web"
+      size="small"
+      fill="outline"
+      (click)="abrirWeb(recurso.web); $event.stopPropagation()">
+      Ver web
+    </ion-button>
+  </ion-card-content>
+</ion-card>

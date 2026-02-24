@@ -1,0 +1,28 @@
+.bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+  }
+  
+  .logo {
+    height: 26px;
+    width: auto;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .saludo {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  
+  .fecha {
+    font-size: 11px;
+    color: #6a7a89;
+    text-transform: capitalize;
+  }
+  

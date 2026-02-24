@@ -1,0 +1,46 @@
+<ion-content class="login-content">
+  <div class="login-wrap">
+
+    <div class="logo">
+      <img src="assets/logo.png" alt="Acompaña" />
+    </div>
+
+    <div class="card">
+      <h1>Bienvenida/o</h1>
+      <p>Inicia sesión en Acompaña</p>
+
+      <ion-item lines="none" class="input">
+        <ion-input
+          [(ngModel)]="email"
+          type="email"
+          placeholder="Correo electrónico">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none" class="input">
+        <ion-input
+          [(ngModel)]="contrasena"
+          type="password"
+          placeholder="Contraseña">
+        </ion-input>
+      </ion-item>
+
+      <ion-text color="danger" *ngIf="error" class="error">
+        <p>{{ error }}</p>
+      </ion-text>
+
+      <ion-button
+        expand="block"
+        class="btn"
+        (click)="hacerLogin()"
+        [disabled]="cargando">
+        Iniciar sesión
+      </ion-button>
+
+      <ion-button expand="block" fill="clear" routerLink="/register" class="link">
+        Crear cuenta
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

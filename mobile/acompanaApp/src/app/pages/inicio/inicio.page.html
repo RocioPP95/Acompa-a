@@ -1,0 +1,34 @@
+<app-cabecera></app-cabecera>
+
+<ion-content class="inicio-content">
+  <div class="inicio-wrap">
+
+    <h1 class="saludo">¡Hola {{ nombre }}!</h1>
+    <p class="subtitulo">¿Qué quieres hacer hoy?</p>
+
+    <div class="acciones">
+
+      <div class="accion-card" (click)="irARecursos()">
+        <img src="assets/recursos.png" alt="Mapa de recursos" />
+        <span>Mapa de Recursos</span>
+      </div>
+      
+      <div class="accion-card" (click)="irATablon()">
+        <img src="assets/tablon-solidario.png" alt="Tablón solidario" />
+        <span>Tablón Solidario</span>
+      </div>
+
+      <!-- en el futuro puedes añadir más -->
+      <!--
+      <div class="accion-card">
+        <img src="assets/img/tablon.png" />
+        <span>Tablón solidario</span>
+      </div>
+      -->
+
+    </div>
+    <app-boton-panico></app-boton-panico>
+
+
+  </div>
+</ion-content>

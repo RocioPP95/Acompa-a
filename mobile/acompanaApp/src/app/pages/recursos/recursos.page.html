@@ -1,0 +1,27 @@
+<app-cabecera></app-cabecera>
+
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-text color="danger" *ngIf="error">
+    <p>{{ error }}</p>
+  </ion-text>
+
+  <ion-spinner *ngIf="cargando"></ion-spinner>
+
+  <app-tarjeta-recurso
+  *ngFor="let r of recursos"
+  [recurso]="r"
+  (detalle)="verDetalle($event)">
+</app-tarjeta-recurso>
+
+
+  <p *ngIf="!cargando && recursos.length === 0 && !error">
+    No hay recursos disponibles.
+  </p>
+  <ion-button routerLink="/inicio" expand="block" fill="outline">
+    Volver a Inicio
+  </ion-button>
+  <app-boton-panico></app-boton-panico>
+
+</ion-content>

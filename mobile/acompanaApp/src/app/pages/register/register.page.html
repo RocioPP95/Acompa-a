@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-item>
+    <ion-label position="stacked">Rol</ion-label>
+    <ion-select [(ngModel)]="rol">
+      <ion-select-option value="familia">Familia</ion-select-option>
+      <ion-select-option value="asociacion">Asociación</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Nombre público</ion-label>
+    <ion-input [(ngModel)]="nombrePublico"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Email</ion-label>
+    <ion-input [(ngModel)]="email" type="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Contraseña</ion-label>
+    <ion-input [(ngModel)]="contrasena" type="password"></ion-input>
+  </ion-item>
+
+  <ion-text color="danger" *ngIf="error">
+    <p>{{ error }}</p>
+  </ion-text>
+
+  <ion-button expand="block" (click)="registrar()" [disabled]="cargando">
+    Crear cuenta
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" routerLink="/login">
+    Volver a login
+  </ion-button>
+
+</ion-content>
