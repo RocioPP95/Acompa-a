@@ -43,7 +43,12 @@ const routes: Routes = [
     path: 'sos',
     loadComponent: () =>
       import('./pages/sos/sos.page').then(m => m.SosPage),
-  }
+  },
+  {
+  path: 'perfil',
+  loadComponent: () => import('./pages/perfil/perfil.page').then(m => m.PerfilPage)
+}
+
 ];
 
 @NgModule({

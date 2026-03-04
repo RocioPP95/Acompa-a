@@ -2,15 +2,15 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../db");
 
-console.log("✅ usuarios.routes.js cargado");
+console.log(" usuarios.routes.js cargado");
 
 // LISTAR usuarios
 router.get("/", async (req, res) => {
   const conn = await pool.getConnection();
   try {
     const rows = await conn.query(
-      `SELECT id, rol, email, nombre_publico
-       FROM usuarios
+      `SELECT id, rol, email, nombre_publico, avatar_url
+        FROM usuarios
        ORDER BY id DESC`
     );
     res.json(rows);
@@ -31,10 +31,10 @@ router.get("/:id", async (req, res) => {
   const conn = await pool.getConnection();
   try {
     const rows = await conn.query(
-      `SELECT id, rol, email, nombre_publico
-       FROM usuarios
-       WHERE id = ?
-       LIMIT 1`,
+      `SELECT id, rol, email, nombre_publico, avatar_url
+FROM usuarios
+WHERE id = ?
+LIMIT 1`,
       [id]
     );
 
@@ -93,10 +93,10 @@ router.post("/login", async (req, res) => {
   const conn = await pool.getConnection();
   try {
     const rows = await conn.query(
-      `SELECT id, rol, email, contrasena, nombre_publico
-       FROM usuarios
-       WHERE email = ?
-       LIMIT 1`,
+      `SELECT id, rol, email, contrasena, nombre_publico, avatar_url
+FROM usuarios
+WHERE email = ?
+LIMIT 1`,
       [email]
     );
 
@@ -109,7 +109,8 @@ router.post("/login", async (req, res) => {
       id: usuario.id,
       rol: usuario.rol,
       email: usuario.email,
-      nombrePublico: usuario.nombre_publico
+      nombrePublico: usuario.nombre_publico,
+      avatarUrl: usuario.avatar_url
     });
   } finally {
     conn.release();

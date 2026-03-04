@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cabecera',
@@ -15,19 +16,21 @@ export class CabeceraComponent implements OnInit, OnDestroy {
   fechaHora = '';
   private timer: any;
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
-    // Usuario
+
     const raw = localStorage.getItem('usuario');
     if (raw) {
       const u = JSON.parse(raw);
       this.nombre = u.nombrePublico || '';
     }
 
-    // Fecha y hora
     this.actualizarFechaHora();
+
     this.timer = setInterval(() => {
       this.actualizarFechaHora();
-    }, 60000); // cada minuto
+    }, 60000);
   }
 
   ngOnDestroy() {
@@ -51,4 +54,9 @@ export class CabeceraComponent implements OnInit, OnDestroy {
 
     this.fechaHora = `${fecha} · ${hora}`;
   }
+
+  irPerfil() {
+    this.router.navigate(['/perfil']);
+  }
+
 }

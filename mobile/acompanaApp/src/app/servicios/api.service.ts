@@ -24,6 +24,7 @@ export interface Usuario {
   rol: RolUsuario;
   email: string;
   nombrePublico: string;
+  avatarUrl?: string | null;
 }
 
 export interface UsuarioListaItem {
@@ -31,17 +32,49 @@ export interface UsuarioListaItem {
   rol: RolUsuario;
   email: string;
   nombre_publico: string; // lo que viene de la BD en GET /usuarios
+  avatarUrl?: string | null;
+}
+export interface AlertaSOS {
+  id?: number;
+  user_id: number;
+  lat: number;
+  lng: number;
+  created_at?: string;
+}
+export interface ContactoConfianza {
+  id: number;
+  user_id: number;
+  nombre: string;
+  telefono: string;
+  created_at?: string;
+}
+export interface Post {
+  id: number
+  titulo: string
+  contenido: string
+  nombre_publico: string
+  avatar_url?: string
+  created_at: string
+}
+export interface CommentItem {
+  id: number;
+  post_id: number;
+  user_id: number;
+  contenido: string;
+  created_at: string;
+  nombre_publico: string;
+  avatar_url?: string | null;
 }
 
 /** ====== SERVICE ====== */
 
 @Injectable({ providedIn: "root" })
 export class ApiService {
-  // ⚠️ En navegador (ionic serve) localhost vale.
+  //  En navegador (ionic serve) localhost vale.
   // En móvil real: usa la IP de tu PC, ej: http://192.168.1.20:3000
   private baseUrl = "http://localhost:3000";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /** ====== RECURSOS (CRUD) ====== */
 
@@ -99,8 +132,8 @@ export class ApiService {
   // Actualizar usuario (PUT /usuarios/:id)
   actualizarUsuario(
     id: number,
-    data: { rol: string; email: string; nombrePublico: string; contrasena?: string }
-  ): Observable<any> {
+    data: { rol: string; email: string; nombrePublico: string; avatarUrl?: string | null; contrasena?: string }
+  ) {
     return this.http.put(`${this.baseUrl}/usuarios/${id}`, data);
   }
 
@@ -108,4 +141,48 @@ export class ApiService {
   borrarUsuario(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/usuarios/${id}`);
   }
+
+  crearAlerta(data: { user_id: number; lat: number; lng: number }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/alerts`, data);
+  }
+
+  obtenerAlertasUsuario(userId: number): Observable<AlertaSOS[]> {
+    return this.http.get<AlertaSOS[]>(`${this.baseUrl}/alerts/user/${userId}`);
+  }
+
+  obtenerContactosUsuario(userId: number): Observable<ContactoConfianza[]> {
+    return this.http.get<ContactoConfianza[]>(`${this.baseUrl}/contactos/user/${userId}`);
+  }
+
+  crearContacto(data: { user_id: number; nombre: string; telefono: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/contactos`, data);
+  }
+
+  borrarContacto(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/contactos/${id}`);
+  }
+  cerrarAlerta(id: number) {
+    return this.http.patch(`${this.baseUrl}/alerts/${id}/close`, {});
+  }
+  obtenerPosts() {
+    return this.http.get<Post[]>(this.baseUrl + "/posts")
+  }
+
+  crearPost(data: any) {
+    return this.http.post(this.baseUrl + "/posts", data)
+  }
+  borrarPost(id: number) {
+    return this.http.delete(`${this.baseUrl}/posts/${id}`);
+  }
+  obtenerComentarios(postId: number): Observable<CommentItem[]> {
+    return this.http.get<CommentItem[]>(`${this.baseUrl}/comments/post/${postId}`);
+  }
+
+  crearComentario(data: { post_id: number; user_id: number; contenido: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/comments`, data);
+  }
+  obtenerPostsUsuario(userId: number) {
+  return this.http.get<any[]>(`${this.baseUrl}/posts/user/${userId}`);
+}
+
 }

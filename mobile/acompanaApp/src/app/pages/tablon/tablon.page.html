@@ -1,12 +1,105 @@
-<app-cabecera></app-cabecera>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Tablón</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Tablón Solidario</h2>
-  <p>Aquí irá las publicaciones...</p>
+<ion-content class="ion-padding tablon">
 
-  <ion-button routerLink="/inicio" expand="block" fill="outline">
-    Volver a Inicio
-  </ion-button>
+  <!-- Crear anuncio -->
+  <ion-card class="crear-card">
+    <ion-card-content>
+      <div class="crear-row">
+        <ion-avatar class="avatar">
+          <img src="assets/avatar.png" />
+        </ion-avatar>
+
+        <ion-button expand="block" class="crear-btn" (click)="crearPost()">
+          ¿Quieres publicar algo?
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de posts -->
+  <ion-card class="post-card" *ngFor="let post of posts">
+
+    <ion-card-header>
+      <div class="post-header">
+
+        <div class="post-user">
+          <ion-avatar class="avatar">
+            <img [src]="post.avatar_url || 'assets/avatar.png'" />
+          </ion-avatar>
+
+          <div class="post-meta">
+            <div class="post-author">{{ post.nombre_publico }}</div>
+            <div class="post-date">{{ post.created_at | date:'medium' }}</div>
+          </div>
+        </div>
+
+        <ion-button fill="clear" color="danger" (click)="eliminarPost(post.id)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+
+      </div>
+
+      <ion-card-title class="post-title">
+        {{ post.titulo }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content class="post-content">
+      {{ post.contenido }}
+    </ion-card-content>
+
+    <!-- Acciones -->
+    <div class="post-actions">
+      <ion-button fill="clear" class="action-btn">
+        <ion-icon name="heart-outline"></ion-icon>
+        <span>Me gusta</span>
+      </ion-button>
+
+      <!--  Comentar ahora llama a la función -->
+      <ion-button fill="clear" class="action-btn" (click)="comentar(post.id)">
+        <ion-icon name="chatbubble-outline"></ion-icon>
+        <span>Comentar</span>
+      </ion-button>
+
+      <ion-button fill="clear" class="action-btn">
+        <ion-icon name="share-social-outline"></ion-icon>
+        <span>Compartir</span>
+      </ion-button>
+    </div>
+
+    <!-- Comentarios debajo del post -->
+   <div class="comments" *ngIf="comentariosPorPost[post.id]?.length">
+
+  <div class="comment" *ngFor="let c of comentariosPorPost[post.id]">
+
+    <ion-avatar class="comment-avatar">
+      <img [src]="c.avatar_url || 'assets/avatar.png'" />
+    </ion-avatar>
+
+    <div class="comment-content">
+      <span class="comment-author">{{ c.nombre_publico }}</span>
+      <span class="comment-text">{{ c.contenido }}</span>
+    </div>
+
+  </div>
+
+</div>
+
+  </ion-card>
+
+  <!-- Si no hay posts -->
+  <div class="empty" *ngIf="!posts.length">
+    <ion-icon name="megaphone-outline"></ion-icon>
+    <p>No hay anuncios todavía.</p>
+    <ion-button (click)="crearPost()">Crear el primero</ion-button>
+  </div>
+
+  <!-- Botón pánico -->
   <app-boton-panico></app-boton-panico>
 
 </ion-content>

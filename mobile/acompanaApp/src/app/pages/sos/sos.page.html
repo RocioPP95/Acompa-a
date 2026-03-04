@@ -10,45 +10,68 @@
 <ion-content class="sos-content">
   <div class="wrap">
 
-    <div class="sos-circle">
-      <div class="sos-inner">SOS</div>
+    <!-- BOTÓN SOS -->
+    <div class="sos-circle" (click)="activarSOS()" [class.disabled]="cargando">
+      <div class="sos-inner">
+        <ion-spinner *ngIf="cargando" name="crescent"></ion-spinner>
+        <span *ngIf="!cargando">SOS</span>
+      </div>
     </div>
 
-    <p class="texto">
-      Pulsa el botón de pánico si necesitas ayuda urgente, tus contactos de confianza
-      recibirán tu ubicación en tiempo real.
-    </p>
+    <!-- ESTADOS -->
+    <ion-text color="primary" *ngIf="cargando">
+      <p>Enviando SOS...</p>
+    </ion-text>
 
-    <ion-button expand="block" class="btn-add">
+    <ion-text color="success" *ngIf="ok">
+      <p>SOS enviado </p>
+    </ion-text>
+
+    <ion-text color="danger" *ngIf="error">
+      <p>{{ error }}</p>
+    </ion-text>
+
+    <p class="texto">
+      Pulsa el botón de pánico si necesitas ayuda urgente. Tus contactos de confianza
+      recibirán tu ubicación.
+    </p>
+    <ion-button expand="block" color="success" *ngIf="alertaActivaId" (click)="cerrarAlerta()">
+      Cerrar alerta
+    </ion-button>
+
+    <!-- BOTÓN AÑADIR CONTACTO -->
+    <ion-button expand="block" class="btn-add" (click)="anadirContacto()">
       Añadir contactos de confianza
       <ion-icon name="add" slot="end"></ion-icon>
     </ion-button>
 
+    <!-- LISTA DE CONTACTOS -->
     <div class="lista">
-      <div class="contacto">
+
+      <div class="contacto" *ngFor="let c of contactos">
         <div class="icono"></div>
+
         <div class="info">
-          <div class="nombre">Papá</div>
-          <div class="tel">222-339</div>
+          <div class="nombre">{{ c.nombre }}</div>
+          <div class="tel">{{ c.telefono }}</div>
         </div>
-        <ion-button fill="clear" class="call">
+
+        <!-- LLAMAR -->
+        <ion-button fill="clear" class="call" [href]="'tel:' + c.telefono">
           <ion-icon name="call"></ion-icon>
+        </ion-button>
+
+        <!-- BORRAR -->
+        <ion-button fill="clear" color="danger" (click)="eliminarContacto(c.id)">
+          <ion-icon name="trash"></ion-icon>
         </ion-button>
       </div>
 
-      <div class="contacto">
-        <div class="icono"></div>
-        <div class="info">
-          <div class="nombre">Voluntaria Laura</div>
-          <div class="tel">111-111</div>
-        </div>
-        <ion-button fill="clear" class="call">
-          <ion-icon name="call"></ion-icon>
-        </ion-button>
-      </div>
+      <!-- Si no hay contactos -->
+      <a class="gestionar" href="#" *ngIf="!contactos.length">
+        No hay contactos aún. Pulsa “Añadir contactos de confianza”.
+      </a>
 
-      <a class="gestionar" href="#">Gestionar contactos</a>
     </div>
-
   </div>
 </ion-content>

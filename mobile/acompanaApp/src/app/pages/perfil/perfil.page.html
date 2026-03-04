@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mi perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Cabecera perfil -->
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+    <ion-avatar style="width:70px; height:70px;">
+      <img [src]="avatarUrl || 'assets/avatar.png'">
+    </ion-avatar>
+
+    <div>
+      <h2 style="margin:0;">{{ nombrePublico || 'Usuario' }}</h2>
+      <p style="margin:0; opacity:0.7;">{{ usuario?.email }}</p>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <ion-item>
+    <ion-label position="stacked">Nombre público</ion-label>
+    <ion-input [(ngModel)]="nombrePublico" placeholder="Tu nombre público"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">URL del avatar (opcional)</ion-label>
+    <ion-input [(ngModel)]="avatarUrl" placeholder="https://..."></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="guardar()" style="margin-top:16px;">
+    Guardar cambios
+  </ion-button>
+
+  <!-- Mensajes -->
+  <ion-text color="success" *ngIf="mensaje">
+    <p style="margin-top:10px;">{{ mensaje }}</p>
+  </ion-text>
+
+  <ion-text color="danger" *ngIf="error">
+    <p style="margin-top:10px;">{{ error }}</p>
+  </ion-text>
+
+  <!-- Mis anuncios (opcional: solo si tienes misPosts en TS) -->
+  <h3 style="margin-top:22px;">Mis anuncios</h3>
+
+  <ion-card *ngFor="let p of misPosts">
+    <ion-card-header>
+      <ion-card-title>{{ p.titulo }}</ion-card-title>
+      <ion-card-subtitle>{{ p.created_at | date:'short' }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{ p.contenido }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-text *ngIf="misPosts && !misPosts.length">
+    <p>No has publicado anuncios todavía.</p>
+  </ion-text>
+
+  <!-- Cerrar sesión -->
+  <ion-button color="danger" expand="block" (click)="logout()" style="margin-top:16px;">
+    Cerrar sesión
+  </ion-button>
+
+</ion-content>
