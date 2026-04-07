@@ -8,6 +8,7 @@ const rutasAlerts = require("./routes/alerts.routes");
 const rutasContactos = require("./routes/contactos.routes");
 const rutasPosts = require("./routes/posts.routes");
 const rutasComments = require("./routes/comments.routes");
+const rutasOfertas = require("./routes/ofertas.routes");
 
 const app = express();
 app.use(cors());
@@ -23,7 +24,7 @@ app.use("/alerts", rutasAlerts);
 app.use("/contactos", rutasContactos);
 app.use("/posts", rutasPosts);
 app.use("/comments", rutasComments);
-
+app.use("/ofertas", rutasOfertas);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`API funcionando en http://localhost:${port}`);

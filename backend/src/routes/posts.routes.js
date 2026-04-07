@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const auth = require("../middlewares/auth");
+
 
 // Crear post
-router.post("/", async (req, res) => {
+router.post("/",auth, async (req, res) => {
 
     const { user_id, titulo, contenido } = req.body;
 
@@ -75,7 +77,7 @@ ORDER BY p.created_at DESC`
 }
 );
 // Borrar post
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",auth, async (req, res) => {
     const id = Number(req.params.id);
     if (!Number.isFinite(id)) {
         return res.status(400).json({ message: "ID inválido" });

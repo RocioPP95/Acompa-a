@@ -27,6 +27,7 @@ export class LoginPage {
 
     this.api.login(this.email, this.contrasena).subscribe({
       next: (usuario) => {
+        localStorage.setItem('token', usuario.token);
         localStorage.setItem('usuario', JSON.stringify(usuario));
         this.cargando = false;
         this.router.navigateByUrl('/inicio');

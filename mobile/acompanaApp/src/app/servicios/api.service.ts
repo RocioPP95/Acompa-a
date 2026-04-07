@@ -24,6 +24,7 @@ export interface Usuario {
   rol: RolUsuario;
   email: string;
   nombrePublico: string;
+  token: string;
   avatarUrl?: string | null;
 }
 
@@ -64,6 +65,17 @@ export interface CommentItem {
   created_at: string;
   nombre_publico: string;
   avatar_url?: string | null;
+}
+export interface OfertaAyuda {
+  id: number;
+  user_id?: number | null;
+  tipo: string;
+  titulo: string;
+  descripcion: string;
+  zona?: string | null;
+  telefono?: string | null;
+  email?: string | null;
+  created_at: string;
 }
 
 /** ====== SERVICE ====== */
@@ -182,7 +194,14 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/comments`, data);
   }
   obtenerPostsUsuario(userId: number) {
-  return this.http.get<any[]>(`${this.baseUrl}/posts/user/${userId}`);
-}
+    return this.http.get<any[]>(`${this.baseUrl}/posts/user/${userId}`);
+  }
+  obtenerOfertas(): Observable<OfertaAyuda[]> {
+    return this.http.get<OfertaAyuda[]>(`${this.baseUrl}/ofertas`);
+  }
+
+  crearOferta(data: Partial<OfertaAyuda>): Observable<any> {
+    return this.http.post(`${this.baseUrl}/ofertas`, data);
+  }
 
 }

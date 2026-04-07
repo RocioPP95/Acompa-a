@@ -58,10 +58,14 @@
   <ion-text *ngIf="misPosts && !misPosts.length">
     <p>No has publicado anuncios todavía.</p>
   </ion-text>
+  <ion-button expand="block" class="btn-outline" routerLink="/inicio">
+      Volver a Inicio
+    </ion-button>
 
   <!-- Cerrar sesión -->
-  <ion-button color="danger" expand="block" (click)="logout()" style="margin-top:16px;">
-    Cerrar sesión
-  </ion-button>
+ <ion-button expand="block" color="danger" (click)="logout()">
+  Cerrar sesión
+</ion-button>
+
 
 </ion-content>

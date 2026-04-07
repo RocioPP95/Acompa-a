@@ -1,27 +1,36 @@
 <app-cabecera></app-cabecera>
 
+<ion-content [fullscreen]="true">
 
-<ion-content [fullscreen]="true" class="ion-padding">
-
-  <ion-text color="danger" *ngIf="error">
+  <!-- Mensajes -->
+  <ion-text color="danger" *ngIf="error" class="ion-padding">
     <p>{{ error }}</p>
   </ion-text>
 
-  <ion-spinner *ngIf="cargando"></ion-spinner>
+  <div class="ion-padding" *ngIf="cargando">
+    <ion-spinner></ion-spinner>
+  </div>
 
-  <app-tarjeta-recurso
-  *ngFor="let r of recursos"
-  [recurso]="r"
-  (detalle)="verDetalle($event)">
-</app-tarjeta-recurso>
+  <!-- MAPA -->
+  <div id="map" class="mapa"></div>
 
+  <!-- Tarjeta reutilizable (solo 1, la seleccionada) -->
+  <div class="card-flotante" *ngIf="seleccionado">
+    <app-tarjeta-recurso
+      [recurso]="seleccionado"
+      (detalle)="verDetalle($event)">
+    </app-tarjeta-recurso>
 
-  <p *ngIf="!cargando && recursos.length === 0 && !error">
-    No hay recursos disponibles.
-  </p>
-  <ion-button routerLink="/inicio" expand="block" fill="outline">
-    Volver a Inicio
-  </ion-button>
+    <ion-button expand="block" fill="clear" color="medium" (click)="seleccionado = null">
+      Cerrar
+    </ion-button>
+  </div>
+  <div>
+    <ion-button expand="block" class="btn-outline" routerLink="/inicio">
+      Volver a Inicio
+    </ion-button>
+  </div>
+
   <app-boton-panico></app-boton-panico>
 
 </ion-content>

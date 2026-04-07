@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ApiService } from 'src/app/servicios/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -20,7 +21,7 @@ export class PerfilPage {
   error = '';
   misPosts: any[] = [];
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router:Router) { }
 
   ionViewWillEnter() {
     this.usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -63,7 +64,7 @@ export class PerfilPage {
     );
   }
   logout() {
-    localStorage.removeItem("usuario");
-    window.location.href = "/login";
-  }
+  localStorage.removeItem('usuario');
+  this.router.navigate(['/login']);
+}
 }

@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const auth = require("../middlewares/auth");
+
 
 // Crear alerta SOS
-router.post("/", async (req, res) => {
+router.post("/",auth, async (req, res) => {
   const { user_id, lat, lng } = req.body;
 
   // Validación correcta

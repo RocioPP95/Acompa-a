@@ -12,19 +12,25 @@
         <img src="assets/recursos.png" alt="Mapa de recursos" />
         <span>Mapa de Recursos</span>
       </div>
-      
+
       <div class="accion-card" (click)="irATablon()">
         <img src="assets/tablon-solidario.png" alt="Tablón solidario" />
         <span>Tablón Solidario</span>
       </div>
 
-      <!-- en el futuro puedes añadir más -->
-      <!--
-      <div class="accion-card">
-        <img src="assets/img/tablon.png" />
-        <span>Tablón solidario</span>
+      <!-- AYUDA -->
+      <div class="accion-card" routerLink="/ofrecer-ayuda">
+        <img src="assets/ofrecer-ayuda.png" alt="Ofrecer ayuda" />
+        <span>Ofrecer ayuda</span>
       </div>
-      -->
+      <!-- TARJETA DENUNCIAS -->
+      <div class="accion-card" routerLink="/denuncias">
+        <img src="assets/denuncias.png" alt="Denuncias" />
+        <span>Denuncias</span>
+      </div>
+      
+
+
 
     </div>
     <app-boton-panico></app-boton-panico>

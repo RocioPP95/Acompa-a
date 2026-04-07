@@ -1,8 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const auth = require("../middlewares/auth");
 
 console.log(" usuarios.routes.js cargado");
+//esto no se si se pone aqui , VERIFICARLOOOOO
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 // LISTAR usuarios
 router.get("/", async (req, res) => {
@@ -60,10 +64,12 @@ router.post("/register", async (req, res) => {
 
   const conn = await pool.getConnection();
   try {
+    const hash = await bcrypt.hash(contrasena, 10);
+
     const result = await conn.query(
       `INSERT INTO usuarios (rol, email, contrasena, nombre_publico)
-       VALUES (?, ?, ?, ?)`,
-      [rol, email, contrasena, nombrePublico]
+   VALUES (?, ?, ?, ?)`,
+      [rol, email, hash, nombrePublico]
     );
 
     res.status(201).json({
@@ -73,10 +79,16 @@ router.post("/register", async (req, res) => {
       nombrePublico
     });
   } catch (e) {
+    console.error("ERROR REGISTER:", e);
+
     if (String(e).includes("Duplicate")) {
       return res.status(409).json({ error: "El email ya existe" });
     }
-    res.status(500).json({ error: "Error del servidor" });
+
+    return res.status(500).json({
+      error: "Error del servidor",
+      detalle: String(e)
+    });
   } finally {
     conn.release();
   }
@@ -94,31 +106,46 @@ router.post("/login", async (req, res) => {
   try {
     const rows = await conn.query(
       `SELECT id, rol, email, contrasena, nombre_publico, avatar_url
-FROM usuarios
-WHERE email = ?
-LIMIT 1`,
+       FROM usuarios
+       WHERE email = ?
+       LIMIT 1`,
       [email]
     );
 
     const usuario = rows[0];
-    if (!usuario || usuario.contrasena !== contrasena) {
+    if (!usuario) {
       return res.status(401).json({ error: "Credenciales incorrectas" });
     }
 
+    const ok = await bcrypt.compare(contrasena, usuario.contrasena);
+    if (!ok) {
+      return res.status(401).json({ error: "Credenciales incorrectas" });
+    }
+
+    const token = jwt.sign(
+      { id: usuario.id, rol: usuario.rol },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.json({
+      token,
       id: usuario.id,
       rol: usuario.rol,
       email: usuario.email,
       nombrePublico: usuario.nombre_publico,
       avatarUrl: usuario.avatar_url
     });
+  } catch (e) {
+    console.error("ERROR LOGIN:", e);
+    res.status(500).json({ error: "Error del servidor", detalle: String(e) });
   } finally {
     conn.release();
   }
 });
 
 // ACTUALIZAR usuario
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isFinite(id)) {
     return res.status(400).json({ error: "ID inválido" });
@@ -166,7 +193,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // BORRAR usuario
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   const id = Number(req.params.id);
   if (!Number.isFinite(id)) {
     return res.status(400).json({ error: "ID inválido" });
